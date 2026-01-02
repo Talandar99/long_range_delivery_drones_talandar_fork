@@ -4,6 +4,8 @@ Date: 2026-01-02
   Changes:
     - First release as fork
   Bugfixes:
+    - fixed crash when you attempt to delivery drone via drone 
+    - fixed crash that happen when delivery drone lost it's cargo mid flight 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025-03-14
