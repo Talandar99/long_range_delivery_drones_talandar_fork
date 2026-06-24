@@ -4,9 +4,9 @@ Date: 2026-06-24
   Bugfixes:
     - Fixed an issue where item spoil time (and other metadata like health or
       ammo count) would reset during transport by transferring physical item
-      stacks using delivery drones.
-    - Changed variables in delivery drone prototype to use braking_force and friction_force for Factorio 2.1+ compatibility.
-    - Updated depot and request depot entity prototypes to properly use the new robot_door table for animations.
+      stacks using delivery drones
+    - Changed variables in delivery drone prototype to use braking_force and friction_force for Factorio 2.1+ compatibility
+    - Updated depot and request depot entity prototypes to properly use the new robot_door table for animations
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2026-02-15
