@@ -1,8 +1,8 @@
 {
     "name": "long_range_delivery_drones_talandar_fork",
-    "title": "Long range delivery drones (fork)",
+    "title": "Long Range Delivery Drones (Talandar's Fork)",
     "description": "Fork of Long Range Delivery Drones made by Klonan created to fix few bugs",
     "author": "Talandar",
-    "factorio_version": "2.0",
-    "version": "2.1.1"
+    "factorio_version": "2.1.0",
+    "version": "2.2.0"
 }

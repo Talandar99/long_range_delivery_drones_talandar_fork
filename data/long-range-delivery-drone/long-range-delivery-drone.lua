@@ -13,7 +13,6 @@ local depot = {
 	collision_box = { { -2.85, -2.85 }, { 2.85, 2.85 } },
 	selection_box = { { -3, -3 }, { 3, 3 } },
 	render_not_in_network_icon = false,
-	landing_location_offset = { 0, 2.5 },
 	icon_draw_specification = {
 		scale = 2,
 		scale_for_many = 2,
@@ -35,27 +34,30 @@ local depot = {
 	logistic_mode = "requester",
 	open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume = 0.43 },
 	close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.43 },
-	opened_duration = 10,
-	animation = {
-		layers = {
-			{
-				filename = "__long_range_delivery_drones_talandar_fork__/data/long-range-delivery-drone/depot.png",
-				width = 224,
-				height = 224,
-				frame_count = 1,
-				shift = util.by_pixel(0, -2),
-				scale = 1,
-			},
-			{
-				filename = "__base__/graphics/entity/artillery-turret/artillery-turret-base-shadow.png",
-				priority = "high",
-				line_length = 1,
-				width = 277,
-				height = 149,
-				frame_count = 1,
-				shift = util.by_pixel(36, 12),
-				draw_as_shadow = true,
-				scale = 1,
+	robot_door = {
+		landing_location_offset = { 0, 2.5 },
+		opened_duration = 10,
+		animation = {
+			layers = {
+				{
+					filename = "__long_range_delivery_drones_talandar_fork__/data/long-range-delivery-drone/depot.png",
+					width = 224,
+					height = 224,
+					frame_count = 1,
+					shift = util.by_pixel(0, -2),
+					scale = 1,
+				},
+				{
+					filename = "__base__/graphics/entity/artillery-turret/artillery-turret-base-shadow.png",
+					priority = "high",
+					line_length = 1,
+					width = 277,
+					height = 149,
+					frame_count = 1,
+					shift = util.by_pixel(36, 12),
+					draw_as_shadow = true,
+					scale = 1,
+				},
 			},
 		},
 	},
@@ -149,27 +151,29 @@ local request_depot = {
 	logistic_mode = "buffer",
 	open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume = 0.43 },
 	close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.43 },
-	opened_duration = 10,
-	animation = {
-		layers = {
-			{
-				filename = "__long_range_delivery_drones_talandar_fork__/data/long-range-delivery-drone/request-depot.png",
-				priority = "extra-high",
-				width = 128,
-				height = 196,
-				frame_count = 1,
-				shift = util.by_pixel(0, -20),
-				scale = 0.5,
-			},
-			{
-				filename = "__long_range_delivery_drones_talandar_fork__/data/long-range-delivery-drone/request-depot-shadow.png",
-				priority = "extra-high",
-				width = 173,
-				height = 76,
-				repeat_count = 1,
-				shift = util.by_pixel(14, 12),
-				draw_as_shadow = true,
-				scale = 0.5,
+	robot_door = {
+		opened_duration = 10,
+		animation = {
+			layers = {
+				{
+					filename = "__long_range_delivery_drones_talandar_fork__/data/long-range-delivery-drone/request-depot.png",
+					priority = "extra-high",
+					width = 128,
+					height = 196,
+					frame_count = 1,
+					shift = util.by_pixel(0, -20),
+					scale = 0.5,
+				},
+				{
+					filename = "__long_range_delivery_drones_talandar_fork__/data/long-range-delivery-drone/request-depot-shadow.png",
+					priority = "extra-high",
+					width = 173,
+					height = 76,
+					repeat_count = 1,
+					shift = util.by_pixel(14, 12),
+					draw_as_shadow = true,
+					scale = 0.5,
+				},
 			},
 		},
 	},
@@ -254,12 +258,12 @@ local delivery_drone = {
 	collision_mask = { layers = {}, colliding_with_tiles_only = true },
 	selection_box = { { -0.7, -1 }, { 0.7, 1 } },
 	effectivity = 1,
-	braking_power = "200kW",
+	braking_force = 200000,
 	energy_source = {
 		type = "void",
 	},
 	consumption = "150kW",
-	friction = 0.000000001,
+	friction_force = 0.000000001,
 	poop_light = {
 		{
 			type = "oriented",
@@ -809,4 +813,3 @@ data:extend({
 	drone_shadow_animation,
 	technology,
 })
-

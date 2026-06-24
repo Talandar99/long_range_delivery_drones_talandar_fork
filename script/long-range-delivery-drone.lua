@@ -119,6 +119,30 @@ local get_contents_dict = function(inventory)
 	return contents_dict
 end
 
+local safe_transfer = function(source_inv, dest_inv, name, quality, count)
+	local remaining = count
+	for i = 1, #source_inv do
+		local stack = source_inv[i]
+		if stack.valid_for_read and stack.name == name and stack.quality.name == quality then
+			if stack.count <= remaining then
+				local inserted = dest_inv.insert(stack)
+				stack.count = stack.count - inserted
+				remaining = remaining - inserted
+			else
+				local old_count = stack.count
+				stack.count = remaining
+				local inserted = dest_inv.insert(stack)
+				stack.count = old_count - inserted
+				remaining = remaining - inserted
+			end
+			if remaining <= 0 then
+				break
+			end
+		end
+	end
+	return count - remaining
+end
+
 local Drone = {}
 Drone.metatable = { __index = Drone }
 script.register_metatable("Drone", Drone.metatable)
@@ -327,12 +351,9 @@ Drone.deliver_to_target = function(self)
 	if name and quality and count then
 		count = min(count, get_stack_size(name))
 		local target_scheduled = self.delivery_target.scheduled
-		local removed = self.inventory.remove({ name = name, quality = quality, count = count })
-		if removed > 0 then
-			self.delivery_target.inventory.insert({ name = name, quality = quality, count = removed })
-		end
-
+		safe_transfer(self.inventory, self.delivery_target.inventory, name, quality, count)
 		source_scheduled[name][quality] = source_scheduled[name][quality] - count
+
 		if source_scheduled[name][quality] <= 0 then
 			source_scheduled[name][quality] = nil
 		end
@@ -551,13 +572,10 @@ Depot.update_logistic_filters = function(self)
 				self.entity.get_logistic_point(defines.logistic_member_index.logistic_container).add_section()
 		end
 		-- fix for requesting drones via drone https://mods.factorio.com/mod/Long_Range_Delivery_Drones/discussion/68e9579c8f19f1d02477423b
-		self.logistic_section.set_slot(
-			slot_index,
-			{
-				value = DRONE_NAME,
-				min = 1 + ((self.scheduled[DRONE_NAME] and self.scheduled[DRONE_NAME]["normal"]) or 0),
-			}
-		)
+		self.logistic_section.set_slot(slot_index, {
+			value = DRONE_NAME,
+			min = 1 + ((self.scheduled[DRONE_NAME] and self.scheduled[DRONE_NAME]["normal"]) or 0),
+		})
 		--
 		slot_index = slot_index + 1
 		for name, quality_count in pairs(self.scheduled) do
@@ -641,10 +659,7 @@ Depot.transfer_package = function(self, drone)
 	local drone_scheduled = drone.scheduled
 	for name, quality_count in pairs(source_scheduled) do
 		for quality, count in pairs(quality_count) do
-			local removed = source_inventory.remove({ name = name, quality = quality, count = count })
-			if removed > 0 then
-				drone_inventory.insert({ name = name, quality = quality, count = removed })
-			end
+			safe_transfer(source_inventory, drone_inventory, name, quality, count)
 			source_scheduled[name][quality] = nil
 			if not next(source_scheduled[name]) then
 				source_scheduled[name] = nil
