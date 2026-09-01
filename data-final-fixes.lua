@@ -1,6 +1,6 @@
 local overlay_size = 24
-local stack_size = 4 -- Reduced from 16 to 4 (the difference is not visible in the air)
-local variation_count = 2 -- Reduced from 8 to 2 (less garbage for the game engine)
+local stack_size = 4
+local variation_count = 2
 local make_delivery_particle = function(item)
 	local layers = {}
 	local base_size = item.icon_size
@@ -26,16 +26,15 @@ local make_delivery_particle = function(item)
 			local shift = (last and { 0, 0 }) or { 0.5 * (math.random() - 0.5), 0.5 * math.random() }
 			local scale = (last and 1) or 0.4 + 0.6 * math.random()
 			for j, layer in pairs(layers) do
-				-- Instead of util.copy, we build the table manually:
 				local picture = {
-				filename = layer.filename,
-				width = layer.width,
-				height = layer.height,
-				scale = layer.scale * scale,
-				tint = layer.tint,
-				shift = { layer.shift[1] + shift[1], layer.shift[2] + shift[2] }
-			}
-			table.insert(result_layers, picture)
+					filename = layer.filename,
+					width = layer.width,
+					height = layer.height,
+					scale = layer.scale * scale,
+					tint = layer.tint,
+					shift = { layer.shift[1] + shift[1], layer.shift[2] + shift[2] },
+				}
+				table.insert(result_layers, picture)
 			end
 		end
 		local shadow_layers = util.copy(result_layers)
@@ -76,8 +75,8 @@ local item_types = {
 	"repair-tool",
 }
 
-for k, item_type in pairs(item_types) do
-	for k, item in pairs(data.raw[item_type] or {}) do
+for _, item_type in pairs(item_types) do
+	for _, item in pairs(data.raw[item_type] or {}) do
 		make_delivery_particle(item)
 	end
 end
