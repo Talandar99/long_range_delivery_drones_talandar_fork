@@ -392,6 +392,7 @@ Drone.cleanup = function(self)
 				if not next(source_scheduled[name]) then
 					source_scheduled[name] = nil
 				end
+				target_scheduled[name] = target_scheduled[name] or {}
 				target_scheduled[name][quality] = (target_scheduled[name][quality] or count) - count
 				if target_scheduled[name][quality] <= 0 then
 					target_scheduled[name][quality] = nil
@@ -786,8 +787,9 @@ Depot.descope_order = function(self)
 			if not next(scheduled[name]) then
 				scheduled[name] = nil
 			end
+			target_scheduled[name] = target_scheduled[name] or {}
 			target_scheduled[name][quality] = (
-				(target_scheduled[name] and target_scheduled[name][quality] or 0) - count
+				(target_scheduled[name][quality] or 0) - count
 			) + has_count
 			if target_scheduled[name][quality] <= 0 then
 				target_scheduled[name][quality] = nil
